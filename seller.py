@@ -255,12 +255,15 @@ async def upload_prices(watch_remnants, client_id, seller_token):
 
 async def upload_stocks(watch_remnants, client_id, seller_token):
     '''Загружает остатки
+    
     Args:
         watch_remnants(dict): Список с данными с сайта https://timeworld.ru
         client_id(str): id клиента из папки .env
         seller_token(str): token продавца ozon из папки .env
+
     Return:
         tuple: Список не отсутсвующих остатков и всех остатков
+
     Example:
         >>> upload_stocks(watch_remnants, client_id, seller_token)
     '''
