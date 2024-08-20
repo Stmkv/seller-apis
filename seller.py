@@ -12,7 +12,19 @@ logger = logging.getLogger(__file__)
 
 
 def get_product_list(last_id, client_id, seller_token):
-    """Получить список товаров магазина озон"""
+    """Получить список товаров в магазине Ozon.
+
+    Args:
+        last_id (str): Последний просмотренный товар.
+        client_id (str): Идентификатор клиента Ozon.
+        seller_token (str): Ключ API Ozon.
+
+    Returns:
+        list: Список товаров из магазина Ozon в формате json.
+
+    Example:
+        >>> get_product_list(last_id, client_id, seller_token)
+    """
     url = "https://api-seller.ozon.ru/v2/product/list"
     headers = {
         "Client-Id": client_id,
@@ -33,7 +45,7 @@ def get_product_list(last_id, client_id, seller_token):
 
 def get_offer_ids(client_id, seller_token):
     """Получить артикулы товаров магазина озон
-    
+
     Args:
         client_id(str): id клиента из папки .env
         seller_token{str}: token продавца ozon из папки .env
@@ -84,7 +96,7 @@ def update_price(prices: list, client_id, seller_token):
 def update_stocks(stocks: list, client_id, seller_token):
     """Обновить остатки
     Args:
-        stocks(list): Список товаров 
+        stocks(list): Список товаров
         client_id(str): id клиента из папки .env
         seller_token(str): token продавца ozon из папки .env
 
@@ -107,7 +119,7 @@ def update_stocks(stocks: list, client_id, seller_token):
 
 def download_stock():
     """Скачать файл ostatki с сайта casio
-    
+
     Returns:
         watch_remnants(dict): Словаь с остатками товара с сайта https://timeworld.ru
 
@@ -135,7 +147,7 @@ def download_stock():
 
 
 def create_stocks(watch_remnants, offer_ids):
-    '''Создает список остатков по данным с Ozon и словаря watch_remnants
+    """Создает список остатков по данным с Ozon и словаря watch_remnants
 
     Args:
         watch_remnants(dict): Список остатков по файлу ostatki.xls
@@ -146,7 +158,7 @@ def create_stocks(watch_remnants, offer_ids):
 
     Example:
         >>> create_stocks(watch_remnants, offer_ids)
-    '''
+    """
     # Уберем то, что не загружено в seller
     stocks = []
     for watch in watch_remnants:
@@ -224,7 +236,7 @@ def divide(lst: list, n: int):
         yield: список элементов от i до i + n
 
     Exemple:
-        >>> lsts = (i for i in divide([0, 1, 2, 3, 4, 5], 3)) 
+        >>> lsts = (i for i in divide([0, 1, 2, 3, 4, 5], 3))
         >>> for lst in lsts:
         >>> print lst
             [0, 1]
@@ -236,7 +248,7 @@ def divide(lst: list, n: int):
 
 
 async def upload_prices(watch_remnants, client_id, seller_token):
-    '''Загружает цены
+    """Загружает цены
     Args:
         watch_remnants(dict): Список с данными с сайта https://timeworld.ru
         client_id(str): id клиента из папки .env
@@ -245,7 +257,7 @@ async def upload_prices(watch_remnants, client_id, seller_token):
         list: Список обновленных цен на товары
     Example:
         >>> upload_prices(watch_remnants, client_id, seller_token)
-    '''
+    """
     offer_ids = get_offer_ids(client_id, seller_token)
     prices = create_prices(watch_remnants, offer_ids)
     for some_price in list(divide(prices, 1000)):
@@ -254,8 +266,8 @@ async def upload_prices(watch_remnants, client_id, seller_token):
 
 
 async def upload_stocks(watch_remnants, client_id, seller_token):
-    '''Загружает остатки
-    
+    """Загружает остатки
+
     Args:
         watch_remnants(dict): Список с данными с сайта https://timeworld.ru
         client_id(str): id клиента из папки .env
@@ -266,7 +278,7 @@ async def upload_stocks(watch_remnants, client_id, seller_token):
 
     Example:
         >>> upload_stocks(watch_remnants, client_id, seller_token)
-    '''
+    """
     offer_ids = get_offer_ids(client_id, seller_token)
     stocks = create_stocks(watch_remnants, offer_ids)
     for some_stock in list(divide(stocks, 100)):
